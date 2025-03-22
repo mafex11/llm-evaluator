@@ -17,6 +17,15 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 
 const Home = () => {
   const [file, setFile] = useState(null);
@@ -33,7 +42,7 @@ const Home = () => {
         const res = await axios.get("http://localhost:5000/dataset");
         setDataset(res.data);
       } catch (err) {
-        console.error("❌ Error fetching dataset:", err);
+        console.error("Error fetching dataset:", err);
       }
     };
 
@@ -142,14 +151,18 @@ const Home = () => {
     deepseek: result.faithfulness1,
     qwen: result.faithfulness2,
   }));
+
+  const { setTheme } = useTheme()
+
+
   return (
     <div className="min-h-screen bg-muted/40 relative overflow-hidden">
-      {/* Gradient background layer */}
+      
+
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#hsl(var(--primary))/0.03_1px,transparent_1px)] bg-[size:40px_40px] opacity-15 -z-10" />
       
-      {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 py-8 relative">
-        {/* Animated header */}
+      
         <div className="flex items-center gap-3 mb-8 group">
           <div className="p-2 rounded-lg bg-primary/10 border border-primary/20 group-hover:border-primary/30 transition-colors">
             <LayoutDashboard className="h-6 w-6 text-primary" />
@@ -157,6 +170,26 @@ const Home = () => {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
             LLM Evaluation Dashboard
           </h1>
+                <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Upload Section with glass effect */}
@@ -208,11 +241,12 @@ const Home = () => {
                 </div>
               </div>
 
-              {/* Buttons with hover effects */}
+              
               <div className="flex flex-col gap-4 w-full md:w-auto">
                 <Button
                   onClick={handleUpload}
                   disabled={!file || loading}
+                  // variant="primary"
                   className="gap-2 transition-transform hover:-translate-y-0.5"
                 >
                   {loading ? (
@@ -222,7 +256,7 @@ const Home = () => {
                     </>
                   ) : (
                     <>
-                      <UploadCloud className="h-4 w-4" />
+                      <UploadCloud className="h-4 w-4 " />
                       Upload File
                     </>
                   )}
@@ -242,7 +276,7 @@ const Home = () => {
           </CardContent>
         </Card>
 
-        {/* Dataset & Results Section */}
+        
         <Tabs defaultValue="dataset" className="space-y-6">
           <TabsList className="bg-background/80 backdrop-blur-sm border border-border/50">
             <TabsTrigger 
@@ -264,7 +298,7 @@ const Home = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Dataset Table */}
+          
           <TabsContent value="dataset">
             <Card className="backdrop-blur-sm bg-background/80 border-border/50">
               <CardHeader>
@@ -331,7 +365,6 @@ const Home = () => {
             </Card>
           </TabsContent>
 
-          {/* Results Section */}
           <TabsContent value="results">
             <Card className="backdrop-blur-sm bg-background/80 border-border/50">
               <CardHeader>

@@ -104,10 +104,8 @@ const responseSchema = new mongoose.Schema({
 });
 
 // Indexes
-responseSchema.index({ category: 1, difficulty: 1 });
-responseSchema.index({ createdAt: -1 });
-responseSchema.index({ 'model1': 1, 'model2': 1 });
-
+responseSchema.index({ category: 1 });
+responseSchema.index({ difficulty: 1 });
 
 export const Dataset = mongoose.model('Dataset', datasetSchema);
 export const Response = mongoose.model('Response', responseSchema);

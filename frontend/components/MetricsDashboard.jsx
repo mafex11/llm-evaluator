@@ -126,12 +126,12 @@ export const MetricsDashboard = ({ evaluations }) => {
           </TabsContent>
 
           <TabsContent value="comparison">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-8 ">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm">Correctness Comparison</CardTitle>
+                  <CardTitle className="text-sm ">Correctness Comparison</CardTitle>
                 </CardHeader>
-                <CardContent className="h-64">
+                <CardContent className="h-64 ">
                   <BarChart data={evaluations}>
                     <XAxis dataKey="question" hide />
                     <YAxis domain={[0, 10]} />

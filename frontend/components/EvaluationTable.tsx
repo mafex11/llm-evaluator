@@ -36,7 +36,7 @@ export function EvaluationTable() {
 
   const startEvaluation = async () => {
     try {
-      const { data } = await axios.post("http://localhost:5000/evaluate");
+      const { data } = await axios.post("http://localhost:5000/api/evaluate");
       setBatchInfo({ jobId: data.jobId, total: data.totalQuestions });
     } catch (error) {
       console.error("Failed to start evaluation:", error);
@@ -47,9 +47,9 @@ export function EvaluationTable() {
   return (
     <div className="p-5">
       <div className="mb-8 space-y-4">
-        <Button onClick={startEvaluation} disabled={batchInfo.jobId}>
+        {/* <Button onClick={startEvaluation} disabled={batchInfo.jobId}>
           {batchInfo.jobId ? 'Evaluation Running...' : 'Start Batch Evaluation'}
-        </Button>
+        </Button> */}
         {batchInfo.jobId && (
           <BatchControls jobId={batchInfo.jobId} totalQuestions={batchInfo.total} />
         )}

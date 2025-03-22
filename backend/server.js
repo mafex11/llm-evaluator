@@ -5,49 +5,35 @@ import { connectDB } from "./config.js";
 import router from "./routes.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { createClient } from 'redis';
 
 dotenv.config();
 const app = express();
 const server = createServer(app);
-
-// Fix CORS configuration
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-    credentials: true
+    methods: ["GET", "POST"]
   }
 });
 
-// Add API prefix to all routes
-app.use("/api", router);
+// Database
+connectDB();
 
-// Enhanced CORS config
-app.use(cors({
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use("/", router);
 
-// Connect to Redis
-const redisClient = createClient({
-  url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`
-});
-
-redisClient.on('error', err => console.error('Redis Client Error', err));
-await redisClient.connect();
-
-// WebSocket setup remains the same
+// WebSocket
 io.on("connection", (socket) => {
-  console.log("🟢 Client connected");
-  socket.on("disconnect", () => console.log("🔴 Client disconnected"));
+  console.log("Client connected");
+  socket.on("disconnect", () => console.log("Client disconnected"));
 });
 
 export const emitEvaluationUpdate = (data) => {
   io.emit("newEvaluation", data);
 };
 
-// Start server on port 5000
+// Start
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
