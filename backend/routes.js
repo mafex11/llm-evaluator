@@ -167,7 +167,7 @@ const callLLM = async (model, prompt, retries = 3) => {
             model,
             messages: [{ role: "user", content: prompt }],
             temperature: 0.7,
-            max_tokens: 100
+            max_tokens: 1000
           },
           {
             headers: {
